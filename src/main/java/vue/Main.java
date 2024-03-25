@@ -2,8 +2,8 @@ package vue;
 
 import dao.JpaUtil;
 import java.util.List;
-import metier.modele.Client;
-import metier.service.ServiceClient;
+import metier.modele.Eleve;
+import metier.service.Service;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,65 +18,18 @@ public class Main {
 
     public static void main(String[] args) {
         JpaUtil.creerFabriquePersistance();
-        ServiceClient servclient = new ServiceClient();
-
-//        Client c1 = new Client("Hugo", "Victor", "vhugo@paris.fr", "Paris");
-//        c1.setMotDePasse("toto");
-//        System.out.println(c1.toString());
-//        Boolean res = servclient.inscrireClient(c1);
-        Client c2 = new Client("Boloss", "Victor", "vhugo@paris.fr", "Paris");
-        Boolean res = servclient.inscrireClient(c2);
-        /*Client resAuth = servclient.authentifierClient("vhugo@paris.fr", "toto");
-        if (resAuth != null) {
-            System.out.println(resAuth.toString());
-        }
-
-        Client resAuth1 = servclient.authentifierClient("vhuo@paris.fr", "toto");
-        if (resAuth1 != null) {
-            System.out.println(resAuth1.toString());
-        } else {
-            System.out.println("Erreur d'auth");
-        }
-
-        Client resAuth2 = servclient.authentifierClient("vhugo@paris.fr", "tto");
-        if (resAuth2 != null) {
-            System.out.println(resAuth2.toString());
-        } else {
-            System.out.println("Erreur d'auth");
-        }*/
-        Long id1 = new Long(1);
-        Client resID = servclient.findClient(id1);
-        if (resID != null) {
-            System.out.println(resID.toString());
-        } else {
-            System.out.println("Erreur d'auth");
-        }
-
-        resID = servclient.findClient(new Long(2));
-        if (resID != null) {
-            System.out.println(resID.toString());
-        } else {
-            System.out.println("Erreur d'auth");
-        }
+        Service service = new Service();
         
+        Eleve eleve = new Eleve("Joussot", "Gabin", "31/03/2004", 0, "simon.perrigault@insa-lyon.fr", "Vulcania");
+        Eleve eleve2 = new Eleve("Joussot", "Gabin", "31/03/2004", 0, "simon.errigault@insa-lyon.fr", "Vulcania");
         
-//        Client c3 = new Client("Simon", "Gabin", "SG@insa.fr", "Lyon");
-//        
-//        c3.setMotDePasse("BG");
-//        Boolean res3 = servclient.inscrireClient(c3);
-
-        Client c4 = new Client("Simon", "Gabin", "tollose@insa.fr", "TooLoose");      
-        c4.setMotDePasse("BG");
-        Boolean res4 = servclient.inscrireClient(c4);
-        
-        
-        List<Client> clients = servclient.consulterListeClients();
-        System.out.println("\n");
-        for (Client c : clients)
-        {
-            System.out.println("Client #"+c.getId()+": "+c.getNom()+" "+c.getPrenom()+" ["+c.getLatitude()+", "+c.getLongitude()+"]");
+        try {
+            eleve = service.inscrireEleve(eleve, "0691664J");
+            eleve2 = service.inscrireEleve(eleve2, "0691664J");
         }
-        System.out.println("\n");
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
         
 
         JpaUtil.fermerFabriquePersistance();
