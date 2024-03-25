@@ -4,6 +4,9 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>metier.modele.Eleve</class>
     <class>metier.modele.Etablissement</class>
+    <class>metier.modele.Intervenant</class>
+    <class>metier.modele.Matiere</class>
+    <class>metier.modele.Demande</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Instructif"/>
       <property name="javax.persistence.jdbc.user" value="dasi"/>

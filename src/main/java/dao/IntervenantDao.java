@@ -7,29 +7,26 @@ package dao;
 
 import java.util.List;
 import javax.persistence.TypedQuery;
+import metier.modele.Demande;
 import metier.modele.Eleve;
+import metier.modele.Intervenant;
 
 /**
  *
  * @author sperrigaul
  */
-public class EleveDao {
-
-    public void create(Eleve eleve) {
-        JpaUtil.obtenirContextePersistance().persist(eleve);
-    }
-
-    public Eleve rechercheParID(Long id) {
-        return JpaUtil.obtenirContextePersistance().find(Eleve.class, id);
+public class IntervenantDao {
+    public void create(Intervenant interv) {
+        JpaUtil.obtenirContextePersistance().persist(interv);
     }
     
-    public Eleve rechercheParMail(String mail) {
-        String jpql = "select a from Eleve a where a.mail = :unMail";
-        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Eleve.class);
+     public Intervenant rechercheParMail(String mail) {
+        String jpql = "select a from Intervenant a where a.mail = :unMail";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Intervenant.class);
         query.setParameter("unMail", mail);
-        List<Eleve> resultat;
+        List<Intervenant> resultat;
         resultat = query.getResultList();
-        Eleve resultat_unique;
+        Intervenant resultat_unique;
         if (resultat.isEmpty()) {
             resultat_unique = null;
         } else {
@@ -37,5 +34,5 @@ public class EleveDao {
         }
         return resultat_unique;
     }
-
+    
 }

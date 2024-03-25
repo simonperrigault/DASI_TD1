@@ -33,6 +33,7 @@ public class Etablissement {
     private float IPS;
     private double lat;
     private double lon;
+    
     @OneToMany(mappedBy="etablissement")
     private List<Eleve> liste_eleves = new ArrayList();
     
