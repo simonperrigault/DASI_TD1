@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 /**
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
  * @author sperrigaul
  */
 @Entity
+@Inheritance (strategy = InheritanceType.SINGLE_TABLE)
 public class Intervenant {
 
     @Id
@@ -28,6 +31,10 @@ public class Intervenant {
     private int niveauMin;
     private int niveauMax;
     private String tel;
+    
+    //private String etat;
+    @OneToOne
+    private Demande intervEnCours;
 
     private String mail;
 

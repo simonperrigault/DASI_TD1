@@ -7,6 +7,7 @@ package dao;
 
 import java.util.List;
 import javax.persistence.TypedQuery;
+import metier.modele.Demande;
 import metier.modele.Eleve;
 import metier.modele.Etablissement;
 import metier.modele.Matiere;
@@ -22,4 +23,9 @@ public class MatiereDao {
         return query.getResultList();
 
     }
+    public void create(Matiere matiere) {
+        JpaUtil.obtenirContextePersistance().persist(matiere);
+    }
+    
+    
 }

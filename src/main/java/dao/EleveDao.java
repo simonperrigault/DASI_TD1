@@ -7,6 +7,7 @@ package dao;
 
 import java.util.List;
 import javax.persistence.TypedQuery;
+import metier.modele.Demande;
 import metier.modele.Eleve;
 
 /**
@@ -36,6 +37,11 @@ public class EleveDao {
             resultat_unique = resultat.get(0);
         }
         return resultat_unique;
+    }
+    
+    public List<Demande> historiqueDemandes(Eleve eleve)
+    {
+        return JpaUtil.obtenirContextePersistance().merge(eleve).getDemandes();
     }
 
 }

@@ -70,6 +70,10 @@ public class Eleve implements Serializable {
         return id;
     }
 
+    public List<Demande> getDemandes() {
+        return demandes;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

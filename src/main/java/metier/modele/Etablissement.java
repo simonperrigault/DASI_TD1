@@ -34,8 +34,8 @@ public class Etablissement {
     private double lat;
     private double lon;
     
-    @OneToMany(mappedBy="etablissement")
-    private List<Eleve> liste_eleves = new ArrayList();
+    /*@OneToMany(mappedBy="etablissement")
+    private List<Eleve> liste_eleves = new ArrayList();*/
     
     protected Etablissement() {
         
@@ -140,10 +140,13 @@ public class Etablissement {
     public void setLon(double lon) {
         this.lon = lon;
     }
-
-    public List<Eleve> getListe_eleves() {
-        return liste_eleves;
+/*
+    public void addListe_eleves(Eleve eleves) {
+        this.liste_eleves.add(eleves);
     }
+*/
+
+   
 
     
     

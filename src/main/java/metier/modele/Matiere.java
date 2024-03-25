@@ -23,5 +23,14 @@ public class Matiere {
         
     @Column(unique = true)
     private String nom;
+
+    public Matiere() {
+    }
+
+    public Matiere(String nom) {
+        this.nom = nom;
+    }
+    
+    
         
 }

@@ -149,5 +149,24 @@ public class Service {
         }
         return demande;
     }
+    
+    public List<Demande> historiqueDemandes(Eleve eleve)
+    {
+        EleveDao eleveDao = new EleveDao();
+        List<Demande>
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            eleveDao.historiqueDemandes(eleve)
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return demande;
+    }
 
 }

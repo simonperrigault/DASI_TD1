@@ -47,6 +47,10 @@ public class Main {
         System.out.println("auth i2 : "+service.authentifierIntervenant("cam.martin@sorbonne.fr", "azerty1235"));
         System.out.println("auth i3 : "+service.authentifierIntervenant("cam.martin@rbonne.fr", "azerty123"));
         
+        //Ajout des matières dans la base
+        uncalledService.InsertMatiere();
+        
+        service.
         
 
         JpaUtil.fermerFabriquePersistance();

@@ -8,9 +8,11 @@ package metier.service;
 import com.google.maps.model.LatLng;
 import dao.IntervenantDao;
 import dao.JpaUtil;
+import dao.MatiereDao;
 import java.util.List;
 import metier.modele.Etablissement;
 import metier.modele.Intervenant;
+import metier.modele.Matiere;
 import util.EducNetApi;
 import util.GeoNetApi;
 import util.Message;
@@ -42,4 +44,43 @@ public class UncalledService {
         }
 
     }
+    
+    public void InsertMatiere()
+    {
+        MatiereDao matiereDao = new MatiereDao();
+
+        
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            
+            Matiere matiere = new Matiere("Histoire-Géo");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Maths");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Français");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Espagnol");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Anglais");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Chimie");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Physique");
+            matiereDao.create(matiere);
+            matiere = new Matiere("SVT");
+            matiereDao.create(matiere);
+            
+            
+            
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+    }
+            
 }
