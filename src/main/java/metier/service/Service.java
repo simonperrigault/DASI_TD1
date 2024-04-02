@@ -261,5 +261,21 @@ public class Service {
         return res;
     }
     
+    public List<Demande> getHistoriqueDemandesIntervenant(Intervenant inter) {
+        List<Demande> res = inter.getDemandes();
+        
+        res.sort((o1, o2) -> o1.getDateFin().compareTo(o2.getDateFin()));
+        
+        return res;
+    }
+    
+    public List<Demande> getHistoriqueDemandesEleve(Eleve eleve) {
+        List<Demande> res = eleve.getDemandes();
+        
+        res.sort((o1, o2) -> o1.getDateFin().compareTo(o2.getDateFin()));
+        
+        return res;
+    }
+    
 
 }
