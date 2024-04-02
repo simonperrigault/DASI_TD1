@@ -3,6 +3,7 @@ package vue;
 import dao.JpaUtil;
 import java.util.Date;
 import java.util.List;
+import metier.modele.Demande;
 import metier.modele.Eleve;
 import metier.service.Service;
 import metier.service.UncalledService;
@@ -23,7 +24,7 @@ public class Main {
         Service service = new Service();
 
         
-        Eleve eleve = new Eleve("Joussot", "Gabin", new Date(2004,03,31), 0, "simon.perrigault@insa-lyon.fr", "Vulcania");
+        Eleve eleve = new Eleve("Joussot", "Simon", new Date(2004,03,31), 5, "simon.perrigault@insa-lyon.fr", "Vulcania");
         Eleve eleve2 = new Eleve("Joussot", "Gabin", new Date(2004,03,31), 0, "simon.errigault@insa-lyon.fr", "Vulcania");
         
         try {
@@ -48,9 +49,15 @@ public class Main {
         System.out.println("auth i3 : "+service.authentifierIntervenant("cam.martin@rbonne.fr", "azerty123"));
         
         //Ajout des matières dans la base
-        uncalledService.InsertMatiere();
+        uncalledService.InsertMatieres();
+        System.out.println("Liste des matières : ");
+        System.out.println(service.getAllMatieresAlphabetique());
         
-        service.
+        
+        Demande demande1 = service.selectionnerIntervenantDemande(eleve, service.getAllMatieresAlphabetique().get(0), "Je suis en galère");
+        System.out.println(demande1);
+        Demande demande2 = service.selectionnerIntervenantDemande(eleve2, service.getAllMatieresAlphabetique().get(1), "Je suis en galère");
+        System.out.println(demande2);
         
 
         JpaUtil.fermerFabriquePersistance();

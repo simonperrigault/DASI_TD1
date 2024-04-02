@@ -19,6 +19,10 @@ public class EleveDao {
     public void create(Eleve eleve) {
         JpaUtil.obtenirContextePersistance().persist(eleve);
     }
+    
+    public void update(Eleve eleve) {
+        JpaUtil.obtenirContextePersistance().merge(eleve);
+    }
 
     public Eleve rechercheParID(Long id) {
         return JpaUtil.obtenirContextePersistance().find(Eleve.class, id);
@@ -37,11 +41,6 @@ public class EleveDao {
             resultat_unique = resultat.get(0);
         }
         return resultat_unique;
-    }
-    
-    public List<Demande> historiqueDemandes(Eleve eleve)
-    {
-        return JpaUtil.obtenirContextePersistance().merge(eleve).getDemandes();
     }
 
 }

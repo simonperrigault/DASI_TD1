@@ -15,6 +15,7 @@ public class EtablissementDao {
     public void create(Etablissement etabli) {
         JpaUtil.obtenirContextePersistance().persist(etabli);
     }
+   
 
     public Etablissement rechercheParCode(String code) {
         return JpaUtil.obtenirContextePersistance().find(Etablissement.class, code);

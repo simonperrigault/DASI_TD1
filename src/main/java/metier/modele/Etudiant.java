@@ -16,16 +16,7 @@ public class Etudiant extends Intervenant {
     private String universite;
     private String specialite;
 
-    public Etudiant(String universite, String specialite) {
-        this.universite = universite;
-        this.specialite = specialite;
-    }
-
     public Etudiant() {
-    }
-
-    public Etudiant(String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
-        super(nom, prenom, niveauMin, niveauMax, tel, mail, motDePasse);
     }
 
     public Etudiant(String universite, String specialite, String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
@@ -33,6 +24,12 @@ public class Etudiant extends Intervenant {
         this.universite = universite;
         this.specialite = specialite;
     }
+
+    @Override
+    public String toString() {
+        return "Etudiant{" + "nom=" + nom + ", prenom=" + prenom + ", niveauMin=" + niveauMin + ", niveauMax=" + niveauMax + ", tel=" + tel + ", mail=" + mail + "universite=" + universite + ", specialite=" + specialite + '}';
+    }    
+    
 
     public String getUniversite() {
         return universite;

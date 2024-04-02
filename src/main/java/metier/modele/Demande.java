@@ -33,8 +33,6 @@ public class Demande {
     
     @ManyToOne
     private Intervenant intervenant;
-    
-    private String etat;
 
     @Temporal(TemporalType.DATE)
     private Date DateDebut;
@@ -53,11 +51,81 @@ public class Demande {
     public Demande() {
     }
 
-    public Demande(Eleve eleve, Intervenant intervenant, Matiere matiere, String detail) {
+    public Demande(Eleve eleve, Matiere matiere, String detail) {
         this.eleve = eleve;
-        this.intervenant = intervenant;
         this.matiere = matiere;
         this.detail = detail;
+    }
+
+    @Override
+    public String toString() {
+        return "Demande{" + "eleve=" + eleve + ", intervenant=" + intervenant + ", DateDebut=" + DateDebut + ", DateFin=" + DateFin + ", matiere=" + matiere + ", note=" + note + ", detail=" + detail + ", bilan=" + bilan + '}';
+    }
+    
+    
+
+    public Eleve getEleve() {
+        return eleve;
+    }
+
+    public void setEleve(Eleve eleve) {
+        this.eleve = eleve;
+    }
+
+    public Intervenant getIntervenant() {
+        return intervenant;
+    }
+
+    public void setIntervenant(Intervenant intervenant) {
+        this.intervenant = intervenant;
+    }
+
+    public Date getDateDebut() {
+        return DateDebut;
+    }
+
+    public void setDateDebut(Date DateDebut) {
+        this.DateDebut = DateDebut;
+    }
+
+    public Date getDateFin() {
+        return DateFin;
+    }
+
+    public void setDateFin(Date DateFin) {
+        this.DateFin = DateFin;
+    }
+
+    public Matiere getMatiere() {
+        return matiere;
+    }
+
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
+    }
+
+    public int getNote() {
+        return note;
+    }
+
+    public void setNote(int note) {
+        this.note = note;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getBilan() {
+        return bilan;
+    }
+
+    public void setBilan(String bilan) {
+        this.bilan = bilan;
     }
     
     

@@ -11,13 +11,17 @@ import dao.EleveDao;
 import dao.EtablissementDao;
 import dao.IntervenantDao;
 import dao.JpaUtil;
+import dao.MatiereDao;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.TypedQuery;
 import metier.modele.Demande;
 import metier.modele.Eleve;
 import metier.modele.Etablissement;
 import metier.modele.Intervenant;
+import metier.modele.Matiere;
 import util.EducNetApi;
 import util.GeoNetApi;
 import util.Message;
@@ -131,7 +135,7 @@ public class Service {
         return inter;
     }
     
-    public Demande CreerDemande(Demande demande)
+    public Demande creerDemande(Demande demande)
     {
         DemandeDao demandeDao = new DemandeDao();
 
@@ -150,14 +154,14 @@ public class Service {
         return demande;
     }
     
-    public List<Demande> historiqueDemandes(Eleve eleve)
+    public Demande actualiserDemande(Demande demande)
     {
-        EleveDao eleveDao = new EleveDao();
-        List<Demande>
+        DemandeDao demandeDao = new DemandeDao();
+
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-            eleveDao.historiqueDemandes(eleve)
+            demandeDao.update(demande);
             JpaUtil.validerTransaction();
         } catch (Exception ex) {
             JpaUtil.annulerTransaction();
@@ -168,5 +172,94 @@ public class Service {
         }
         return demande;
     }
+    
+    public List<Matiere> getAllMatieresAlphabetique() {
+        MatiereDao dao = new MatiereDao();
+        List<Matiere> res = new ArrayList();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            res = dao.getListMatieres();
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
+    public Demande selectionnerIntervenantDemande(Eleve eleve, Matiere matiere, String detail) {
+        IntervenantDao intervDao = new IntervenantDao();
+        EleveDao eleveDao = new EleveDao();
+        DemandeDao demandeDao = new DemandeDao();
+        
+        Demande res = new Demande(eleve, matiere, detail);
+        res.setDateDebut(new Date());
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            
+            demandeDao.create(res);
+            
+            Intervenant intervenant = null;
+            eleve.addDemande(res);
+            eleveDao.update(eleve);
+            
+            List<Intervenant> allIntervenants = intervDao.getIntervenantsDispo(eleve.getClasse());
+            if (allIntervenants.isEmpty()) {
+                res = null;
+            }
+            else {
+                intervenant = allIntervenants.get(0);
+                intervenant.addDemande(res);
+                intervenant.setDemandeEnCours(res);
+                intervDao.update(intervenant);
+                
+                res.setIntervenant(intervenant);
+                demandeDao.update(res);
+                
+                String classeEleve = Integer.toString(eleve.getClasse()) + "ème";
+                if (eleve.getClasse() == 0) {
+                    classeEleve = "Terminale";
+                }
+                else if (eleve.getClasse() == 1) {
+                    classeEleve = "1ère";
+                }
+                else if (eleve.getClasse() == 2) {
+                    classeEleve = "2nde";
+                }
+                Message.envoyerNotification(intervenant.getTel(), "Bonjour " + intervenant.getPrenom() + ". Merci de prendre en charge la demande de soutien en \""
+                        + res.getMatiere().getNom() + "\" demandée à "+res.getDateDebut().getHours()+"h"+res.getDateDebut().getMinutes()+" par "+eleve.getPrenom()+" en classe de "+ classeEleve);
+            }
+            
+            
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
+    public int getDureeMoyenneSoutiens(Intervenant intervenant) {
+        int res = 0;
+        
+        for (Demande dem : intervenant.getDemandes()) {
+            res += 60*(dem.getDateFin().getHours() - dem.getDateDebut().getHours()) + dem.getDateFin().getMinutes()-dem.getDateFin().getMinutes();
+        }
+        
+        res /= intervenant.getDemandes().size();
+        
+        return res;
+    }
+    
 
 }

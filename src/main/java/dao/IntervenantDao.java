@@ -16,11 +16,16 @@ import metier.modele.Intervenant;
  * @author sperrigaul
  */
 public class IntervenantDao {
+
     public void create(Intervenant interv) {
         JpaUtil.obtenirContextePersistance().persist(interv);
     }
     
-     public Intervenant rechercheParMail(String mail) {
+    public void update(Intervenant interv) {
+        JpaUtil.obtenirContextePersistance().merge(interv);
+    }
+
+    public Intervenant rechercheParMail(String mail) {
         String jpql = "select a from Intervenant a where a.mail = :unMail";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Intervenant.class);
         query.setParameter("unMail", mail);
@@ -35,4 +40,17 @@ public class IntervenantDao {
         return resultat_unique;
     }
     
+    public List<Intervenant> getAllIntervenants() {
+        String jpql = "select a from Intervenant a";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Intervenant.class);
+        return query.getResultList();
+    }
+    
+    public List<Intervenant> getIntervenantsDispo(int niveau) {
+        String jpql = "select i from Intervenant i where i.demandeEnCours = null and i.niveauMax <= :classe and i.niveauMin >= :classe order by size(i.demandes)";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Intervenant.class);
+        query.setParameter("classe", niveau);
+        return query.getResultList();
+    }
+
 }

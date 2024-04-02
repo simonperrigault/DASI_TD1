@@ -14,4 +14,27 @@ import javax.persistence.Entity;
 @Entity
 public class Autre extends Intervenant{
     private String activite;
+
+    public Autre() {
+    }
+
+    public Autre(String activite, String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
+        super(nom, prenom, niveauMin, niveauMax, tel, mail, motDePasse);
+        this.activite = activite;
+    }
+
+    public String getActivite() {
+        return activite;
+    }
+
+    public void setActivite(String activite) {
+        this.activite = activite;
+    }
+
+    @Override
+    public String toString() {
+        return "Autre{" + "nom=" + nom + ", prenom=" + prenom + ", niveauMin=" + niveauMin + ", niveauMax=" + niveauMax + ", tel=" + tel + ", mail=" + mail + "activite=" + activite + '}';
+    }
+    
+    
 }

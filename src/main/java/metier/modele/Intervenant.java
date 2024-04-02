@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -25,24 +26,23 @@ public class Intervenant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String nom;
-    private String prenom;
-    private int niveauMin;
-    private int niveauMax;
-    private String tel;
+    protected Long id;
+    protected String nom;
+    protected String prenom;
+    protected int niveauMin;
+    protected int niveauMax;
+    protected String tel;
     
-    //private String etat;
     @OneToOne
-    private Demande intervEnCours;
-
-    private String mail;
+    protected Demande demandeEnCours;
 
     @Column(unique = true)
-    private String motDePasse;
+    protected String mail;
+
+    protected String motDePasse;
 
     @OneToMany(mappedBy = "intervenant")
-    private List<Demande> demandes;
+    protected List<Demande> demandes;
 
     public Intervenant() {
     }
@@ -61,6 +61,7 @@ public class Intervenant {
     public String toString() {
         return "Intervenant{" + "nom=" + nom + ", prenom=" + prenom + ", niveauMin=" + niveauMin + ", niveauMax=" + niveauMax + ", tel=" + tel + ", mail=" + mail + '}';
     }
+    
 
     public void setId(Long id) {
         this.id = id;
@@ -92,6 +93,18 @@ public class Intervenant {
 
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
+    }
+
+    public Demande getDemandeEnCours() {
+        return demandeEnCours;
+    }
+
+    public void setDemandeEnCours(Demande demandeEnCours) {
+        this.demandeEnCours = demandeEnCours;
+    }
+    
+    public void addDemande(Demande demande) {
+        this.demandes.add(demande);
     }
 
 

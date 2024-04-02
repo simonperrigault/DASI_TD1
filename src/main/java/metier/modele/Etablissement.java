@@ -34,9 +34,6 @@ public class Etablissement {
     private double lat;
     private double lon;
     
-    /*@OneToMany(mappedBy="etablissement")
-    private List<Eleve> liste_eleves = new ArrayList();*/
-    
     protected Etablissement() {
         
     }

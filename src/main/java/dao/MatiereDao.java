@@ -17,14 +17,18 @@ import metier.modele.Matiere;
  * @author sperrigaul
  */
 public class MatiereDao {
-    public List<Matiere> ListMatieres() {
-        String jpql = "select a from Matiere a";
+    public List<Matiere> getListMatieres() {
+        String jpql = "select a from Matiere a order by a.nom";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Matiere.class);
         return query.getResultList();
 
     }
     public void create(Matiere matiere) {
         JpaUtil.obtenirContextePersistance().persist(matiere);
+    }
+    
+    public Matiere find(Long id) {
+        return JpaUtil.obtenirContextePersistance().find(Matiere.class, id);
     }
     
     
