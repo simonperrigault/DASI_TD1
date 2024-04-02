@@ -135,25 +135,6 @@ public class Service {
         return inter;
     }
     
-    public Demande creerDemande(Demande demande)
-    {
-        DemandeDao demandeDao = new DemandeDao();
-
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            demandeDao.create(demande);
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
-            
-        }
-        return demande;
-    }
-    
     public Demande actualiserDemande(Demande demande)
     {
         DemandeDao demandeDao = new DemandeDao();
@@ -171,6 +152,25 @@ public class Service {
             
         }
         return demande;
+    }
+    
+    public Intervenant actualiserIntervenant(Intervenant interv)
+    {
+        IntervenantDao dao = new IntervenantDao();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            dao.update(interv);
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return interv;
     }
     
     public List<Matiere> getAllMatieresAlphabetique() {
