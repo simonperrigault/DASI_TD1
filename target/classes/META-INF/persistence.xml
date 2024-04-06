@@ -11,7 +11,7 @@
     <class>metier.modele.Enseignant</class>
     <class>metier.modele.Etudiant</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Instructif"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/instructif"/>
       <property name="javax.persistence.jdbc.user" value="dasi"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.password" value="dasi"/>

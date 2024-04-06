@@ -5,6 +5,9 @@
  */
 package dao;
 
+import java.util.List;
+import javax.persistence.TypedQuery;
+import metier.modele.Eleve;
 import metier.modele.Etablissement;
 
 /**
@@ -20,4 +23,13 @@ public class EtablissementDao {
     public Etablissement rechercheParCode(String code) {
         return JpaUtil.obtenirContextePersistance().find(Etablissement.class, code);
     }
+    
+    public List<Etablissement> getAllEtablissements() {
+        String jpql = "select e from Etablissement e order by e.nom";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Etablissement.class);
+        return query.getResultList();
+
+    }
+    
+    
 }

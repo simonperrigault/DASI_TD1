@@ -17,22 +17,88 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.TypedQuery;
+import metier.modele.Autre;
 import metier.modele.Demande;
 import metier.modele.Eleve;
+import metier.modele.Enseignant;
 import metier.modele.Etablissement;
+import metier.modele.Etudiant;
 import metier.modele.Intervenant;
 import metier.modele.Matiere;
 import util.EducNetApi;
 import util.GeoNetApi;
 import util.Message;
+import java.util.HashMap;
 
 /**
  *
  * @author sperrigaul
  */
 public class Service {
+     public void InsertIntervenants() {
+        IntervenantDao intervDao = new IntervenantDao();
 
-    public Eleve inscrireEleve(Eleve eleve, String code_etablissement) throws IOException, Exception {
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+
+            Intervenant interv = new Etudiant("Sorbonne", "Langues Orientales","Martin", "Camille", 2, 0, "0655447788", "cam.martin@sorbonne.fr", "azerty123");
+            intervDao.create(interv);
+            interv = new Enseignant("Supérieur", "Zola", "Anna", 6, 3, "0633221144", "anna.zola@sup.fr", "azerty12345");
+            intervDao.create(interv);
+            interv = new Autre("Retraité", "Wirane", "Hamza", 6, 3, "0758693652", "hamza.wirane@sup.fr", "azerty12345");
+            intervDao.create(interv);
+            
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+
+    }
+    
+    public void InsertMatieres()
+    {
+        MatiereDao matiereDao = new MatiereDao();
+
+        
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            
+            Matiere matiere = new Matiere("Histoire-Géo");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Maths");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Français");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Espagnol");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Anglais");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Chimie");
+            matiereDao.create(matiere);
+            matiere = new Matiere("Physique");
+            matiereDao.create(matiere);
+            matiere = new Matiere("SVT");
+            matiereDao.create(matiere);
+            
+            
+            
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+    }
+    
+    public Eleve inscrireEleve(Eleve eleve, String code_etablissement) {
         EleveDao elevedao = new EleveDao();
         EtablissementDao etablidao = new EtablissementDao();
 
@@ -47,7 +113,7 @@ public class Service {
                 List<String> result = api.getInformationCollege(code_etablissement);
                 if (result == null)
                 {
-                 result = api.getInformationLycee(code_etablissement);   
+                    result = api.getInformationLycee(code_etablissement);   
                 }
 
                 if (result != null) {
@@ -62,7 +128,7 @@ public class Service {
                     float ips = Float.parseFloat(result.get(8));
                     etablissement = new Etablissement(code_etablissement, nom_etabli, secteur, codeCommune, nomCommune, codeDepartement, nomDepartement, academie, ips);
                     
-                    String adresseEtablissement = nom_etabli + nomCommune;
+                    String adresseEtablissement = nom_etabli + ", " + nomCommune;
                     LatLng coordsEtablissement = GeoNetApi.getLatLng(adresseEtablissement);
                     etablissement.setLat(coordsEtablissement.lat);
                     etablissement.setLon(coordsEtablissement.lng);
@@ -81,6 +147,7 @@ public class Service {
             Message.envoyerMail("contact@instruct.if", eleve.getMail(), "Bienvenue sur le réseau INSTRUCT'IF", "Bonjour "+eleve.getPrenom()+", nous te confirmons ton inscription sur le réseau INSTRUCT' IF. Si tu as besoin d'un soutien pour tes leçons ou tes devoirs, rends-toi sur notre site pour une mise en relation avec un intervenant.");
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             JpaUtil.annulerTransaction();
             Message.envoyerMail("contact@instruct.if", eleve.getMail(), "Echec de l'inscription sur le réseau INSTRUCT'IF", "Bonjour "+eleve.getPrenom()+", ton inscription sur le réseau INSTRUCT'IF a malencontreusement échoué... Merci de recommencer ultérieurement.");
             eleve = null;
@@ -192,6 +259,82 @@ public class Service {
         return res;
     }
     
+    public List<Etablissement> getAllEtablissementsAlphabetique() {
+        EtablissementDao dao = new EtablissementDao();
+        List<Etablissement> res = new ArrayList();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            res = dao.getAllEtablissements();
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
+    public List<Eleve> getAllElevesFromEtablissement(Etablissement e) {
+        EleveDao dao = new EleveDao();
+        List<Eleve> res = new ArrayList();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            res = dao.getAllElevesFromEtablissement(e.getCode());
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
+    public HashMap<Matiere, Double> getHeuresParMatiere(Intervenant intervenant) {
+        IntervenantDao dao = new IntervenantDao();
+        HashMap<Matiere, Double> res = new HashMap();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            res = dao.getMinutesParMatiere(intervenant.getId());
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
+    public HashMap<Integer, Double> getHeuresParClasse(Intervenant intervenant) {
+        IntervenantDao dao = new IntervenantDao();
+        HashMap<Integer, Double> res = new HashMap();
+
+        try {
+            JpaUtil.creerContextePersistance();
+            JpaUtil.ouvrirTransaction();
+            res = dao.getMinutesParClasse(intervenant.getId());
+            JpaUtil.validerTransaction();
+        } catch (Exception ex) {
+            JpaUtil.annulerTransaction();
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+            
+        }
+        return res;
+    }
+    
     public Demande selectionnerIntervenantDemande(Eleve eleve, Matiere matiere, String detail) {
         IntervenantDao intervDao = new IntervenantDao();
         EleveDao eleveDao = new EleveDao();
@@ -253,7 +396,10 @@ public class Service {
         int res = 0;
         
         for (Demande dem : intervenant.getDemandes()) {
-            res += 60*(dem.getDateFin().getHours() - dem.getDateDebut().getHours()) + dem.getDateFin().getMinutes()-dem.getDateFin().getMinutes();
+            if (dem.getDateFin() == null) {
+                continue;
+            }
+            res += (dem.getDateFin().getTime()-dem.getDateDebut().getTime())/1000/60; // en minutes
         }
         
         res /= intervenant.getDemandes().size();

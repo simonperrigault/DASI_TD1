@@ -50,6 +50,13 @@ public class Etablissement {
         this.IPS = IPS;
     }
 
+    @Override
+    public String toString() {
+        return "Etablissement{" + "code=" + code + ", nom=" + nom + ", secteur=" + secteur + ", code_commune=" + code_commune + ", commune=" + commune + ", code_departement=" + code_departement + ", departement=" + departement + ", academie=" + academie + ", IPS=" + IPS + ", lat=" + lat + ", lon=" + lon + '}';
+    }
+    
+    
+
     public String getCode() {
         return code;
     }

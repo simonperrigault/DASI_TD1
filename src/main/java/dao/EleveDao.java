@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.TypedQuery;
 import metier.modele.Demande;
 import metier.modele.Eleve;
+import metier.modele.Etablissement;
 
 /**
  *
@@ -41,6 +42,14 @@ public class EleveDao {
             resultat_unique = resultat.get(0);
         }
         return resultat_unique;
+    }
+    
+    public List<Eleve> getAllElevesFromEtablissement(String code) {
+        String jpql = "select e from Eleve e where e.etablissement.code = :code order by e.nom";
+        TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Etablissement.class);
+        query.setParameter("code", code);
+        return query.getResultList();
+
     }
 
 }
