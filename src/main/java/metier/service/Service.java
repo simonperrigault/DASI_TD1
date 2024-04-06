@@ -43,6 +43,7 @@ public class Service {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
 
+            // on crée 3 intervenants de catégories différentes et les persiste
             Intervenant interv = new Etudiant("Sorbonne", "Langues Orientales","Martin", "Camille", 2, 0, "0655447788", "cam.martin@sorbonne.fr", "azerty123");
             intervDao.create(interv);
             interv = new Enseignant("Supérieur", "Zola", "Anna", 6, 3, "0633221144", "anna.zola@sup.fr", "azerty12345");
@@ -70,6 +71,7 @@ public class Service {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
             
+            // on crée 8 matières et les persiste
             Matiere matiere = new Matiere("Histoire-Géo");
             matiereDao.create(matiere);
             matiere = new Matiere("Maths");
@@ -107,16 +109,18 @@ public class Service {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
             Etablissement etablissement = etablidao.rechercheParCode(code_etablissement);
-            if (etablissement == null) {
-                EducNetApi api = new EducNetApi();
+            if (etablissement == null) { // l'établissement n'est pas présent dans notre base de données
+                EducNetApi api = new EducNetApi(); // on lance l'api pour le trouver
 
+                // on cherche d'abord dans les collèges
                 List<String> result = api.getInformationCollege(code_etablissement);
-                if (result == null)
+                if (result == null) // la recherche dans les collèges n'a pas donné de résultat
                 {
+                    // on cherche dans les lycées
                     result = api.getInformationLycee(code_etablissement);   
                 }
 
-                if (result != null) {
+                if (result != null) { // on a trouvé l'établissement
                     String uai = result.get(0);
                     String nom_etabli = result.get(1);
                     String secteur = result.get(2);
@@ -125,24 +129,25 @@ public class Service {
                     String codeDepartement = result.get(5);
                     String nomDepartement = result.get(6);
                     String academie = result.get(7);
-                    float ips = Float.parseFloat(result.get(8));
+                    float ips = Float.parseFloat(result.get(8)); // ips est un string dans le json donc on le convertit en float
                     etablissement = new Etablissement(code_etablissement, nom_etabli, secteur, codeCommune, nomCommune, codeDepartement, nomDepartement, academie, ips);
                     
+                    // on recherche l'adresse de l'établissement pour avoir ses coordonnées
                     String adresseEtablissement = nom_etabli + ", " + nomCommune;
                     LatLng coordsEtablissement = GeoNetApi.getLatLng(adresseEtablissement);
                     etablissement.setLat(coordsEtablissement.lat);
                     etablissement.setLon(coordsEtablissement.lng);
 
-                    etablidao.create(etablissement);
+                    etablidao.create(etablissement); // et enfin on le persiste
 
                 } 
                 
-                else {
+                else { // on n'a pas trouvé l'établissement
                     throw new Exception("Code établissement inconnu");
                 }
             }
-            eleve.setEtablissement(etablissement);
-            elevedao.create(eleve);
+            eleve.setEtablissement(etablissement); // après avoir trouvé l'établissement, on l'ajoute à l'élève
+            elevedao.create(eleve); // on persiste l'élève
             JpaUtil.validerTransaction();
             Message.envoyerMail("contact@instruct.if", eleve.getMail(), "Bienvenue sur le réseau INSTRUCT'IF", "Bonjour "+eleve.getPrenom()+", nous te confirmons ton inscription sur le réseau INSTRUCT' IF. Si tu as besoin d'un soutien pour tes leçons ou tes devoirs, rends-toi sur notre site pour une mise en relation avec un intervenant.");
         }
@@ -166,6 +171,8 @@ public class Service {
             JpaUtil.ouvrirTransaction();
             eleve = elevedao.rechercheParMail(mail);
             JpaUtil.validerTransaction();
+            // soit l'élève vaut null car son mail n'existe pas
+            // soit le mot de passe est incorrect
             if (eleve != null && !eleve.getMotDePasse().equals(motDePasse)) {
                 eleve = null;
             }
@@ -188,6 +195,8 @@ public class Service {
             JpaUtil.ouvrirTransaction();
             inter = intervenantDao.rechercheParMail(mail);
             JpaUtil.validerTransaction();
+            // soit l'intervenant vaut null car son mail n'existe pas
+            // soit le mot de passe est incorrect
             if (inter != null && !inter.getMotDePasse().equals(motDePasse)) {
                 inter = null;
             }
@@ -341,7 +350,7 @@ public class Service {
         DemandeDao demandeDao = new DemandeDao();
         
         Demande res = new Demande(eleve, matiere, detail);
-        res.setDateDebut(new Date());
+        res.setDateDebut(new Date()); // on met la date de début à la date système actuelle
 
         try {
             JpaUtil.creerContextePersistance();
@@ -350,22 +359,28 @@ public class Service {
             demandeDao.create(res);
             
             Intervenant intervenant = null;
+            // on ajoute la demande à l'historique de l'éleve et on le met à jour
             eleve.addDemande(res);
             eleveDao.update(eleve);
             
+            // on regarde les intervenants disponibles pour la classe de l'élève
             List<Intervenant> allIntervenants = intervDao.getIntervenantsDispo(eleve.getClasse());
-            if (allIntervenants.isEmpty()) {
+            if (allIntervenants.isEmpty()) { // si aucun n'est disponible, on renvoie null
                 res = null;
             }
-            else {
+            else { // sinon, on prend le premier de la liste (ils sont déjà triés par ordre croissant de nombre de demandes)
                 intervenant = allIntervenants.get(0);
+
+                // on ajoute la demande à l'historique de l'intervenant, on le rend indisponible et on le met à jour
                 intervenant.addDemande(res);
                 intervenant.setDemandeEnCours(res);
                 intervDao.update(intervenant);
                 
+                // on met à jour la demande avec l'intervenant
                 res.setIntervenant(intervenant);
                 demandeDao.update(res);
                 
+                // on envoie une notification à l'intervenant
                 String classeEleve = Integer.toString(eleve.getClasse()) + "ème";
                 if (eleve.getClasse() == 0) {
                     classeEleve = "Terminale";
@@ -399,7 +414,8 @@ public class Service {
             if (dem.getDateFin() == null) {
                 continue;
             }
-            res += (dem.getDateFin().getTime()-dem.getDateDebut().getTime())/1000/60; // en minutes
+            // on convertit les millisecondes en minutes
+            res += (dem.getDateFin().getTime()-dem.getDateDebut().getTime())/1000/60;
         }
         
         res /= intervenant.getDemandes().size();
@@ -410,7 +426,8 @@ public class Service {
     public List<Demande> getHistoriqueDemandesIntervenant(Intervenant inter) {
         List<Demande> res = inter.getDemandes();
         
-        res.sort((o1, o2) -> o1.getDateFin().compareTo(o2.getDateFin()));
+        // on trie les demandes par date de début (au cas où elles n'ont pas de date de fin)
+        res.sort((o1, o2) -> o1.getDateDebut().compareTo(o2.getDateDebut()));
         
         return res;
     }
@@ -418,7 +435,8 @@ public class Service {
     public List<Demande> getHistoriqueDemandesEleve(Eleve eleve) {
         List<Demande> res = eleve.getDemandes();
         
-        res.sort((o1, o2) -> o1.getDateFin().compareTo(o2.getDateFin()));
+        // on trie les demandes par date de début (au cas où elles n'ont pas de date de fin)
+        res.sort((o1, o2) -> o1.getDateDebut().compareTo(o2.getDateDebut()));
         
         return res;
     }

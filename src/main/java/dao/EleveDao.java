@@ -35,10 +35,11 @@ public class EleveDao {
         query.setParameter("unMail", mail);
         List<Eleve> resultat;
         resultat = query.getResultList();
+        // on ne veut en retourner qu'un seul mais on a une liste
         Eleve resultat_unique;
-        if (resultat.isEmpty()) {
+        if (resultat.isEmpty()) { // on regarde si la liste est vide = pas de résultat
             resultat_unique = null;
-        } else {
+        } else { // si elle n'est pas vide on prend le premier résultat
             resultat_unique = resultat.get(0);
         }
         return resultat_unique;
