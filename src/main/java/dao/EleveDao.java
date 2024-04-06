@@ -45,7 +45,7 @@ public class EleveDao {
     }
     
     public List<Eleve> getAllElevesFromEtablissement(String code) {
-        String jpql = "select e from Eleve e where e.etablissement.code = :code order by e.nom";
+        String jpql = "select e from Eleve e where e.etablissement.code = :code order by e.nom, e.prenom";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Etablissement.class);
         query.setParameter("code", code);
         return query.getResultList();
