@@ -297,7 +297,7 @@ public class Service {
         return res;
     }
     
-    public HashMap<Matiere, Double> getHeuresParMatiere(Intervenant intervenant) {
+    public HashMap<Matiere, Double> getMinutesParMatiere(Intervenant intervenant) {
         IntervenantDao dao = new IntervenantDao();
         HashMap<Matiere, Double> res = new HashMap();
 
@@ -316,7 +316,7 @@ public class Service {
         return res;
     }
     
-    public HashMap<Integer, Double> getHeuresParClasse(Intervenant intervenant) {
+    public HashMap<Integer, Double> getMinutesParClasse(Intervenant intervenant) {
         IntervenantDao dao = new IntervenantDao();
         HashMap<Integer, Double> res = new HashMap();
 
