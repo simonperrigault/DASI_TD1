@@ -92,8 +92,8 @@ public class Main {
         System.out.println(service.getAllEtablissementsAlphabetique());
         System.out.println(service.getAllElevesFromEtablissement(eleve2.getEtablissement()));
         System.out.println(service.getDureeMoyenneSoutiens(demande1.getIntervenant()));
-        System.out.println(service.getHeuresParClasse(demande1.getIntervenant()));
-        System.out.println(service.getHeuresParMatiere(demande1.getIntervenant()));
+        System.out.println(service.getMinutesParClasse(demande1.getIntervenant()));
+        System.out.println(service.getMinutesParMatiere(demande1.getIntervenant()));
 
         JpaUtil.fermerFabriquePersistance();
 
