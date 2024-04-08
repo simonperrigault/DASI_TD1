@@ -21,13 +21,14 @@ import metier.service.Service;
 public class Main {
 
     public static void main(String[] args) {
-        JpaUtil.desactiverLog();
+        JpaUtil.desactiverLog(); // pour ne pas avoir tous les logs de JpaUtil qui sont seulement utiles pour le debug
         JpaUtil.creerFabriquePersistance();
         Service service = new Service();
         
         //Ajout des intervenants
         System.out.println("\nAjout des intervenants");
         service.InsertIntervenants();
+
         //Ajout des matières dans la base
         System.out.println("\nAjout des matières");
         service.InsertMatieres();
@@ -57,7 +58,7 @@ public class Main {
         eleve5 = service.inscrireEleve(eleve5, "0");
         
         eleve1 = service.authentifierEleve("simon.perrigault@insa-lyon.fr", "Vulcania");
-        System.out.println("auth e1 : "+eleve1);
+        System.out.println("auth e1 : "+eleve1); // on teste le bon login puis 2 mauvais
         System.out.println("auth e2 : "+service.authentifierEleve("simon.perrigault@insa-lyor", "Vulcania"));
         System.out.println("auth e3 : "+service.authentifierEleve("simon.perrigault@insa-lyon.fr", "Vulcan"));
         
@@ -72,28 +73,29 @@ public class Main {
         Demande demande4 = service.selectionnerIntervenantDemande(eleve4, service.getAllMatieresAlphabetique().get(5), "Je suis en galère");
         System.out.println(demande4);
         
-        demande1.setDateFin(new Date(demande1.getDateDebut().getTime()+1000*60*60*2));
-        demande1.setNote(4);
-        demande1.setBilan("Super visio, continue comme ça !");
-        service.actualiserDemande(demande1);
-        demande1.getIntervenant().setDemandeEnCours(null);
-        service.actualiserIntervenant(demande1.getIntervenant());
+        // on imagine qu'une visio vient de se finir
+        demande1.setDateFin(new Date(demande1.getDateDebut().getTime()+1000*60*60*2)); // on note la date de fin
+        demande1.setNote(4); // l'élève attribue une note
+        demande1.setBilan("Super visio, continue comme ça !"); // l'intervenant rédige le bilan de la séance
+        service.actualiserDemande(demande1); // on enregistre dans la base de données
+        demande1.getIntervenant().setDemandeEnCours(null); // on marque l'intervenant comme disponible
+        service.actualiserIntervenant(demande1.getIntervenant()); // et on l'enregistre lui aussi dans la base
         
-        // historique eleve
+        // page historique eleve
         System.out.println("\nHistorique élève : ");
         System.out.println(service.getHistoriqueDemandesEleve(eleve1));
         
-        // historique intervenant
+        // page historique intervenant
         System.out.println("\nHistorique intervenant : ");
         System.out.println(service.getHistoriqueDemandesIntervenant(demande1.getIntervenant()));
         
-        /// tableau de bord intervenant
+        /// page tableau de bord intervenant
         System.out.println("\nTableau de bord intervenant : ");
         System.out.println(service.getAllEtablissementsAlphabetique());
         System.out.println(service.getAllElevesFromEtablissement(eleve2.getEtablissement()));
         System.out.println(service.getDureeMoyenneSoutiens(demande1.getIntervenant()));
-        System.out.println(service.getHeuresParClasse(demande1.getIntervenant()));
-        System.out.println(service.getHeuresParMatiere(demande1.getIntervenant()));
+        System.out.println(service.getMinutesParClasse(demande1.getIntervenant()));
+        System.out.println(service.getMinutesParMatiere(demande1.getIntervenant()));
 
         JpaUtil.fermerFabriquePersistance();
 
