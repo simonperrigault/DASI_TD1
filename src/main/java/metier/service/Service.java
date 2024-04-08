@@ -333,7 +333,12 @@ public class Service {
                 // on met à jour la demande avec l'intervenant
                 res.setIntervenant(intervenant);
                 demandeDao.update(res);
-                
+            }
+            
+            
+            JpaUtil.validerTransaction();
+            
+            if (res != null) {
                 // on envoie une notification à l'intervenant
                 String classeEleve = Integer.toString(eleve.getClasse()) + "ème";
                 if (eleve.getClasse() == 0) {
@@ -348,9 +353,6 @@ public class Service {
                 Message.envoyerNotification(intervenant.getTel(), "Bonjour " + intervenant.getPrenom() + ". Merci de prendre en charge la demande de soutien en \""
                         + res.getMatiere().getNom() + "\" demandée à "+res.getDateDebut().getHours()+"h"+res.getDateDebut().getMinutes()+" par "+eleve.getPrenom()+" en classe de "+ classeEleve);
             }
-            
-            
-            JpaUtil.validerTransaction();
         } catch (Exception ex) {
             JpaUtil.annulerTransaction();
 

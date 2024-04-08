@@ -32,9 +32,15 @@ public class EleveDao {
         String jpql = "select a from Eleve a where a.mail = :unMail";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Eleve.class);
         query.setParameter("unMail", mail);
-        Eleve resultat;
-        resultat = (Eleve) query.getSingleResult();
-        return resultat;
+        List<Eleve> resultat;
+        resultat = query.getResultList();
+        Eleve resultat_unique;
+        if (resultat.isEmpty()) {
+            resultat_unique = null;
+        } else {
+            resultat_unique = resultat.get(0);
+        }
+        return resultat_unique;
     }
     
     public List<Eleve> getAllElevesFromEtablissement(Etablissement etabli) {
