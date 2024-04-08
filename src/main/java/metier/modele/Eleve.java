@@ -32,7 +32,7 @@ public class Eleve implements Serializable {
     private Long id;
     private String nom;
     private String prenom;
-    private int classe;
+    private Integer classe;
     
     @Column(unique = true)
     private String mail;
@@ -51,7 +51,7 @@ public class Eleve implements Serializable {
     protected Eleve() {
     }
 
-    public Eleve(String nom, String prenom, Date datenaissance, int classe, String mail, String motDePasse) {
+    public Eleve(String nom, String prenom, Date datenaissance, Integer classe, String mail, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.classe = classe;

@@ -5,10 +5,7 @@
  */
 package dao;
 
-import java.util.List;
-import javax.persistence.TypedQuery;
 import metier.modele.Demande;
-import metier.modele.Matiere;
 
 /**
  *

@@ -7,10 +7,8 @@ package dao;
 
 import java.util.HashMap;
 import java.util.List;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import metier.modele.Demande;
-import metier.modele.Eleve;
 import metier.modele.Intervenant;
 import metier.modele.Matiere;
 
@@ -24,8 +22,8 @@ public class IntervenantDao {
         JpaUtil.obtenirContextePersistance().persist(interv);
     }
     
-    public void update(Intervenant interv) {
-        JpaUtil.obtenirContextePersistance().merge(interv);
+    public Intervenant update(Intervenant interv) {
+        return JpaUtil.obtenirContextePersistance().merge(interv);
     }
 
     public Intervenant rechercheParMail(String mail) {
@@ -61,10 +59,10 @@ public class IntervenantDao {
         return query.getResultList();
     }
     
-    public HashMap<Matiere, Double> getMinutesParMatiere(Long id) {
-        String jpql = "select d from Demande d where d.intervenant.id = :id";
+    public HashMap<Matiere, Double> getMinutesParMatiere(Intervenant inter) {
+        String jpql = "select d from Demande d where d.intervenant = :inter";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Demande.class);
-        query.setParameter("id", id);
+        query.setParameter("inter", inter);
         List<Demande> demandes = query.getResultList();
         
         HashMap<Matiere, Double> res = new HashMap();
@@ -78,10 +76,10 @@ public class IntervenantDao {
         return res;
     }
     
-    public HashMap<Integer, Double> getMinutesParClasse(Long id) {
-        String jpql = "select d from Demande d where d.intervenant.id = :id";
+    public HashMap<Integer, Double> getMinutesParClasse(Intervenant inter) {
+        String jpql = "select d from Demande d where d.intervenant = :inter";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Demande.class);
-        query.setParameter("id", id);
+        query.setParameter("inter", inter);
         List<Demande> demandes = query.getResultList();
         
         HashMap<Integer, Double> res = new HashMap();
