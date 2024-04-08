@@ -265,12 +265,11 @@ public class Service {
         return res;
     }
     
-    public List<Eleve> getAllElevesFromEtablissement(Etablissement e) {
-        EleveDao dao = new EleveDao();
-        List<Eleve> res = new ArrayList();
+    public Long getAllElevesFromEtablissement(Etablissement e) {
+        EtablissementDao dao = new EtablissementDao();
 
         JpaUtil.creerContextePersistance();
-        res = dao.getAllElevesFromEtablissement(e);
+        Long res = dao.getAllElevesFromEtablissement(e);
         JpaUtil.fermerContextePersistance();
             
         return res;
