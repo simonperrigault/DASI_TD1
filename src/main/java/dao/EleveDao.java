@@ -21,8 +21,8 @@ public class EleveDao {
         JpaUtil.obtenirContextePersistance().persist(eleve);
     }
     
-    public void update(Eleve eleve) {
-        JpaUtil.obtenirContextePersistance().merge(eleve);
+    public Eleve update(Eleve eleve) {
+        return JpaUtil.obtenirContextePersistance().merge(eleve);
     }
 
     public Eleve rechercheParID(Long id) {
@@ -33,21 +33,15 @@ public class EleveDao {
         String jpql = "select a from Eleve a where a.mail = :unMail";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Eleve.class);
         query.setParameter("unMail", mail);
-        List<Eleve> resultat;
-        resultat = query.getResultList();
-        Eleve resultat_unique;
-        if (resultat.isEmpty()) {
-            resultat_unique = null;
-        } else {
-            resultat_unique = resultat.get(0);
-        }
-        return resultat_unique;
+        Eleve resultat;
+        resultat = (Eleve) query.getSingleResult();
+        return resultat;
     }
     
-    public List<Eleve> getAllElevesFromEtablissement(String code) {
-        String jpql = "select e from Eleve e where e.etablissement.code = :code order by e.nom";
+    public List<Eleve> getAllElevesFromEtablissement(Etablissement etabli) {
+        String jpql = "select e from Eleve e where e.etablissement = :etabli order by e.nom";
         TypedQuery query = JpaUtil.obtenirContextePersistance().createQuery(jpql, Etablissement.class);
-        query.setParameter("code", code);
+        query.setParameter("etabli", etabli);
         return query.getResultList();
 
     }

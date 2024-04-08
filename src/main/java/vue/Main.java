@@ -38,23 +38,23 @@ public class Main {
         }
         
         Intervenant intervenant;
-        
-        System.out.println("\nAjout des élèves");
         intervenant = service.authentifierIntervenant("cam.martin@sorbonne.fr", "azerty123");
         System.out.println("auth i1 : "+intervenant);
         System.out.println("auth i2 : "+service.authentifierIntervenant("cam.martin@sorbonne.fr", "azerty1235"));
         System.out.println("auth i3 : "+service.authentifierIntervenant("cam.martin@rbonne.fr", "azerty123"));
         
-        
+        System.out.println("\nAjout des élèves");
         Eleve eleve1 = new Eleve("Perrigault", "Simon", new Date(2004,03,31), 1, "simon.perrigault@insa-lyon.fr", "Vulcania");
         Eleve eleve2 = new Eleve("Joussot", "Gabin", new Date(2004,03,31), 0, "simon.errigault@insa-lyon.fr", "Vulcania");
         Eleve eleve3 = new Eleve("Gouineaud", "Romane", new Date(2004,03,31), 6, "sn.errigault@insa-lyon.fr", "Vulcania");
         Eleve eleve4 = new Eleve("Ben Bouzid", "Selim", new Date(2004,03,31), 6, "sn@insa-lyon.fr", "Vulcania");
+        Eleve eleve5 = new Eleve("Griguer", "Mehdi", new Date(2004,03,31), 6, "@insa-lyon.fr", "Vulcania");
         
         eleve1 = service.inscrireEleve(eleve1, "0220057T");
         eleve2 = service.inscrireEleve(eleve2, "0691664J");
         eleve3 = service.inscrireEleve(eleve3, "0691664J");
         eleve4 = service.inscrireEleve(eleve4, "0691664J");
+        eleve5 = service.inscrireEleve(eleve5, "0");
         
         eleve1 = service.authentifierEleve("simon.perrigault@insa-lyon.fr", "Vulcania");
         System.out.println("auth e1 : "+eleve1);

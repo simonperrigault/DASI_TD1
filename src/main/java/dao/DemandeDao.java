@@ -19,8 +19,8 @@ public class DemandeDao {
         JpaUtil.obtenirContextePersistance().persist(demande);
     }
     
-    public void update(Demande demande) {
-        JpaUtil.obtenirContextePersistance().merge(demande);
+    public Demande date(Demande demande) {
+        return JpaUtil.obtenirContextePersistance().merge(demande);
     }
     
     
