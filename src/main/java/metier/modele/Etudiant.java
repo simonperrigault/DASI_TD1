@@ -19,7 +19,7 @@ public class Etudiant extends Intervenant {
     public Etudiant() {
     }
 
-    public Etudiant(String universite, String specialite, String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
+    public Etudiant(String universite, String specialite, String nom, String prenom, Integer niveauMin, Integer niveauMax, String tel, String mail, String motDePasse) {
         super(nom, prenom, niveauMin, niveauMax, tel, mail, motDePasse);
         this.universite = universite;
         this.specialite = specialite;

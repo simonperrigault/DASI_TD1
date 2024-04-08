@@ -74,12 +74,8 @@ public class Main {
         System.out.println(demande4);
         
         // on imagine qu'une visio vient de se finir
-        demande1.setDateFin(new Date(demande1.getDateDebut().getTime()+1000*60*60*2)); // on note la date de fin
-        demande1.setNote(4); // l'élève attribue une note
-        demande1.setBilan("Super visio, continue comme ça !"); // l'intervenant rédige le bilan de la séance
-        service.actualiserDemande(demande1); // on enregistre dans la base de données
-        demande1.getIntervenant().setDemandeEnCours(null); // on marque l'intervenant comme disponible
-        service.actualiserIntervenant(demande1.getIntervenant()); // et on l'enregistre lui aussi dans la base
+        service.finirVisioEleve(demande1, 4);
+        service.finirVisioIntervenant(demande1, "Super ! Continue comme ça !");
         
         // page historique eleve
         System.out.println("\nHistorique élève : ");

@@ -30,15 +30,15 @@ public class Etablissement {
     private String code_departement;
     private String departement;
     private String academie;
-    private float IPS;
-    private double lat;
-    private double lon;
+    private Float IPS;
+    private Double lat;
+    private Double lon;
     
     protected Etablissement() {
         
     }
 
-    public Etablissement(String code, String nom, String secteur, String code_commune, String commune, String code_departement, String departement, String academie, float IPS) {
+    public Etablissement(String code, String nom, String secteur, String code_commune, String commune, String code_departement, String departement, String academie, Float IPS) {
         this.code = code;
         this.nom = nom;
         this.secteur = secteur;
@@ -121,27 +121,27 @@ public class Etablissement {
         this.academie = academie;
     }
 
-    public float getIPS() {
+    public Float getIPS() {
         return IPS;
     }
 
-    public void setIPS(float IPS) {
+    public void setIPS(Float IPS) {
         this.IPS = IPS;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
-    public double getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 /*

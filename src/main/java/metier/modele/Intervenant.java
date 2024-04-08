@@ -29,8 +29,8 @@ public class Intervenant {
     protected Long id;
     protected String nom;
     protected String prenom;
-    protected int niveauMin;
-    protected int niveauMax;
+    protected Integer niveauMin;
+    protected Integer niveauMax;
     protected String tel;
     
     @OneToOne
@@ -47,7 +47,7 @@ public class Intervenant {
     public Intervenant() {
     }
 
-    public Intervenant(String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
+    public Intervenant(String nom, String prenom, Integer niveauMin, Integer niveauMax, String tel, String mail, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.niveauMin = niveauMin;
@@ -63,9 +63,6 @@ public class Intervenant {
     }
     
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void setNom(String nom) {
         this.nom = nom;
@@ -75,11 +72,11 @@ public class Intervenant {
         this.prenom = prenom;
     }
 
-    public void setNiveauMin(int niveauMin) {
+    public void setNiveauMin(Integer niveauMin) {
         this.niveauMin = niveauMin;
     }
 
-    public void setNiveauMax(int niveauMax) {
+    public void setNiveauMax(Integer niveauMax) {
         this.niveauMax = niveauMax;
     }
 
@@ -121,11 +118,11 @@ public class Intervenant {
         return prenom;
     }
 
-    public int getNiveauMin() {
+    public Integer getNiveauMin() {
         return niveauMin;
     }
 
-    public int getNiveauMax() {
+    public Integer getNiveauMax() {
         return niveauMax;
     }
 

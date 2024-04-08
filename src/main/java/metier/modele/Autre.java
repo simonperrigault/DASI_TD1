@@ -18,7 +18,7 @@ public class Autre extends Intervenant{
     public Autre() {
     }
 
-    public Autre(String activite, String nom, String prenom, int niveauMin, int niveauMax, String tel, String mail, String motDePasse) {
+    public Autre(String activite, String nom, String prenom, Integer niveauMin, Integer niveauMax, String tel, String mail, String motDePasse) {
         super(nom, prenom, niveauMin, niveauMax, tel, mail, motDePasse);
         this.activite = activite;
     }

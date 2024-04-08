@@ -124,9 +124,4 @@ public class Demande {
     public void setBilan(String bilan) {
         this.bilan = bilan;
     }
-    
-    
-    
-             
-    
 }

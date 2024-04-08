@@ -78,10 +78,6 @@ public class Eleve implements Serializable {
         this.demandes.add(demande);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getNom() {
         return nom;
     }
@@ -106,11 +102,11 @@ public class Eleve implements Serializable {
         this.prenom = prenom;
     }
 
-    public int getClasse() {
+    public Integer getClasse() {
         return classe;
     }
 
-    public void setClasse(int classe) {
+    public void setClasse(Integer classe) {
         this.classe = classe;
     }
 

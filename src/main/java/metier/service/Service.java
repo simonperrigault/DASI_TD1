@@ -12,11 +12,9 @@ import dao.EtablissementDao;
 import dao.IntervenantDao;
 import dao.JpaUtil;
 import dao.MatiereDao;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.TypedQuery;
 import metier.modele.Autre;
 import metier.modele.Demande;
 import metier.modele.Eleve;
@@ -35,7 +33,7 @@ import java.util.HashMap;
  * @author sperrigaul
  */
 public class Service {
-     public void InsertIntervenants() {
+    public void InsertIntervenants() {
         IntervenantDao intervDao = new IntervenantDao();
 
 
@@ -166,59 +164,48 @@ public class Service {
     public Eleve authentifierEleve(String mail, String motDePasse) {
         EleveDao elevedao = new EleveDao();
         Eleve eleve;
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            eleve = elevedao.rechercheParMail(mail);
-            JpaUtil.validerTransaction();
-            // soit l'élève vaut null car son mail n'existe pas
-            // soit le mot de passe est incorrect
-            if (eleve != null && !eleve.getMotDePasse().equals(motDePasse)) {
-                eleve = null;
-            }
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JpaUtil.annulerTransaction();
+
+        JpaUtil.creerContextePersistance();
+        eleve = elevedao.rechercheParMail(mail);
+        // soit l'élève vaut null car son mail n'existe pas
+        // soit le mot de passe est incorrect
+        if (eleve != null && !eleve.getMotDePasse().equals(motDePasse)) {
             eleve = null;
-        } finally {
-            JpaUtil.fermerContextePersistance();
         }
+            
+        JpaUtil.fermerContextePersistance();
         return eleve;
     }
     
     public Intervenant authentifierIntervenant(String mail, String motDePasse) {
         IntervenantDao intervenantDao = new IntervenantDao();
         Intervenant inter;
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            inter = intervenantDao.rechercheParMail(mail);
-            JpaUtil.validerTransaction();
-            // soit l'intervenant vaut null car son mail n'existe pas
-            // soit le mot de passe est incorrect
-            if (inter != null && !inter.getMotDePasse().equals(motDePasse)) {
-                inter = null;
-            }
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JpaUtil.annulerTransaction();
+
+        JpaUtil.creerContextePersistance();
+        inter = intervenantDao.rechercheParMail(mail);
+        // soit l'intervenant vaut null car son mail n'existe pas
+        // soit le mot de passe est incorrect
+        if (inter != null && !inter.getMotDePasse().equals(motDePasse)) {
             inter = null;
-        } finally {
-            JpaUtil.fermerContextePersistance();
         }
+        
+        JpaUtil.fermerContextePersistance();
+
         return inter;
     }
     
-    public Demande actualiserDemande(Demande demande)
+    public Demande finirVisioEleve(Demande demande, Integer note)
     {
         DemandeDao demandeDao = new DemandeDao();
 
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
+
+            demande.setDateFin(new Date());
+            demande.setNote(note);
             demandeDao.update(demande);
+
             JpaUtil.validerTransaction();
         } catch (Exception ex) {
             JpaUtil.annulerTransaction();
@@ -230,14 +217,21 @@ public class Service {
         return demande;
     }
     
-    public Intervenant actualiserIntervenant(Intervenant interv)
+    public Demande finirVisioIntervenant(Demande demande, String bilan)
     {
-        IntervenantDao dao = new IntervenantDao();
+        IntervenantDao intervDao = new IntervenantDao();
+        DemandeDao demandeDao = new DemandeDao();
 
         try {
             JpaUtil.creerContextePersistance();
             JpaUtil.ouvrirTransaction();
-            dao.update(interv);
+
+            demande.setDateFin(new Date());
+            demande.setBilan(bilan);
+            demande.getIntervenant().setDemandeEnCours(null);
+            demandeDao.update(demande);
+            intervDao.update(demande.getIntervenant());
+
             JpaUtil.validerTransaction();
         } catch (Exception ex) {
             JpaUtil.annulerTransaction();
@@ -246,25 +240,17 @@ public class Service {
             JpaUtil.fermerContextePersistance();
             
         }
-        return interv;
+        return demande;
     }
     
     public List<Matiere> getAllMatieresAlphabetique() {
         MatiereDao dao = new MatiereDao();
         List<Matiere> res = new ArrayList();
 
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            res = dao.getListMatieres();
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
+        JpaUtil.creerContextePersistance();
+        res = dao.getListMatieres();
+        JpaUtil.fermerContextePersistance();
             
-        }
         return res;
     }
     
@@ -272,18 +258,10 @@ public class Service {
         EtablissementDao dao = new EtablissementDao();
         List<Etablissement> res = new ArrayList();
 
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            res = dao.getAllEtablissements();
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
+        JpaUtil.creerContextePersistance();
+        res = dao.getAllEtablissements();
+        JpaUtil.fermerContextePersistance();
             
-        }
         return res;
     }
     
@@ -291,18 +269,10 @@ public class Service {
         EleveDao dao = new EleveDao();
         List<Eleve> res = new ArrayList();
 
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            res = dao.getAllElevesFromEtablissement(e.getCode());
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
+        JpaUtil.creerContextePersistance();
+        res = dao.getAllElevesFromEtablissement(e);
+        JpaUtil.fermerContextePersistance();
             
-        }
         return res;
     }
     
@@ -310,18 +280,10 @@ public class Service {
         IntervenantDao dao = new IntervenantDao();
         HashMap<Matiere, Double> res = new HashMap();
 
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            res = dao.getMinutesParMatiere(intervenant.getId());
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
+        JpaUtil.creerContextePersistance();
+        res = dao.getMinutesParMatiere(intervenant);
+        JpaUtil.fermerContextePersistance();
             
-        }
         return res;
     }
     
@@ -329,18 +291,10 @@ public class Service {
         IntervenantDao dao = new IntervenantDao();
         HashMap<Integer, Double> res = new HashMap();
 
-        try {
-            JpaUtil.creerContextePersistance();
-            JpaUtil.ouvrirTransaction();
-            res = dao.getMinutesParClasse(intervenant.getId());
-            JpaUtil.validerTransaction();
-        } catch (Exception ex) {
-            JpaUtil.annulerTransaction();
-
-        } finally {
-            JpaUtil.fermerContextePersistance();
+        JpaUtil.creerContextePersistance();
+        res = dao.getMinutesParClasse(intervenant);
+        JpaUtil.fermerContextePersistance();
             
-        }
         return res;
     }
     
@@ -407,15 +361,15 @@ public class Service {
         return res;
     }
     
-    public int getDureeMoyenneSoutiens(Intervenant intervenant) {
-        int res = 0;
+    public Integer getDureeMoyenneSoutiens(Intervenant intervenant) {
+        Integer res = 0;
         
         for (Demande dem : intervenant.getDemandes()) {
             if (dem.getDateFin() == null) {
                 continue;
             }
             // on convertit les millisecondes en minutes
-            res += (dem.getDateFin().getTime()-dem.getDateDebut().getTime())/1000/60;
+            res += (int) ((dem.getDateFin().getTime()-dem.getDateDebut().getTime())/1000/60);
         }
         
         res /= intervenant.getDemandes().size();
